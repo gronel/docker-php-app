@@ -1,0 +1,39 @@
+# For more information: https://laravel.com/docs/sail
+version: '3'
+services:
+  tms_hris:
+    container_name: $CONTAINER_NAME
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    tty: true
+    build:
+      # can be github url or any directory
+      # this should be the root directory of the files we want to copy into the container
+      context: ./images/$IMAGE/
+      # this is where we install apache and other services our app need
+      # we can also copy files from our context (path) into the docker container
+      dockerfile: Dockerfile
+    ports:
+      - $APACHE_PORT:$APACHE_PORT
+      - $APACHE_SSL_PORT:$APACHE_SSL_PORT
+    volumes:
+      - ./:/var/www/html
+      - $APACHE_LOG_VOLUME:/var/log/apache2
+      - ./images/$IMAGE/ssl:/var/ssl-cert
+      - ./images/$IMAGE/php.ini:/etc/php/$PHP_VERSION/apache2/php.ini
+      - ./images/$IMAGE/xdebug.ini:/etc/php/$PHP_VERSION/mods-available/xdebug.ini
+      - ./images/$IMAGE/000-default.conf:/etc/apache2/sites-enabled/000-default.conf
+      - ./images/$IMAGE/apache2.conf:/etc/apache2/apache2.conf
+      - ./images/$IMAGE/ports.conf:/etc/apache2/ports.conf
+      - ./images/$IMAGE/wait-for-mysql.sh:/root/wait-for-mysql.sh
+      - ./images/$IMAGE/cacert.pem:/etc/ssl/certs/cacert.pem
+    environment:
+      APP_DNS: $APP_DNS
+      APACHE_PORT: $APACHE_PORT
+      APACHE_SSL_PORT: $APACHE_SSL_PORT
+      ENABLE_OPCACHE: $ENABLE_OPCACHE
+    networks:
+      - mynet
+networks:
+  mynet:
+     external: true
