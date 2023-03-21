@@ -1,7 +1,7 @@
 # For more information: https://laravel.com/docs/sail
 version: '3'
 services:
-  tms_hris:
+  php8:
     container_name: $CONTAINER_NAME
     extra_hosts:
       - 'host.docker.internal:host-gateway'
@@ -17,7 +17,7 @@ services:
       - $APACHE_PORT:$APACHE_PORT
       - $APACHE_SSL_PORT:$APACHE_SSL_PORT
     volumes:
-      - ./:/var/www/html
+      - $SOURCE_LOCATION:/var/www/html
       - $APACHE_LOG_VOLUME:/var/log/apache2
       - ./images/$IMAGE/ssl:/var/ssl-cert
       - ./images/$IMAGE/php.ini:/etc/php/$PHP_VERSION/apache2/php.ini
