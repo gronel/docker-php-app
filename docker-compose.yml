@@ -8,6 +8,7 @@ services:
       - $SSLPORT:443
       - 5173:5173
       - 3101:3101
+      - 3102:3102
     volumes:
       - $SOURCE_DIR:/var/www/html:delegated
       - ./images/php8-apache/php.ini:/etc/php/8.2/apache2/php.ini
