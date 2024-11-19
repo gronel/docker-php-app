@@ -7,9 +7,9 @@ RUN mkdir -p /etc/apt/keyrings && \
 RUN add-apt-repository ppa:ondrej/php
 RUN add-apt-repository ppa:ondrej/apache2
 RUN apt-get update && \
-    apt-get install -y nodejs php8.2 php8.2-mbstring php8.2-mysqli php8.2-bcmath php8.2-gmp \
-    mariadb-client git unzip php8.2-xml php8.2-dev apache2 libapache2-mod-php8.2 php8.2-curl net-tools dos2unix \
-    php8.2-zip php8.2-ldap php8.2-xdebug php8.2-soap locales supervisor clang
+    apt-get install -y nodejs php7.2 php7.2-mbstring php7.2-mysqli php7.2-bcmath php7.2-gmp \
+    mariadb-client git unzip php7.2-xml php7.2-dev apache2 libapache2-mod-php7.2 php7.2-curl net-tools dos2unix \
+    php7.2-zip php7.2-ldap php7.2-xdebug php7.2-soap locales supervisor clang
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
 RUN ~/.cargo/bin/cargo install cargo-php --git https://github.com/davidcole1340/ext-php-rs.git?rev=8985cb2f82ac680083b74a5f377b2fda9c8f04d4

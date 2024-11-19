@@ -2,7 +2,7 @@ services:
   app:
     container_name: $CONTAINER_NAME
     tty: true
-    build: ./images/php8-apache
+    build: ./images/php7-apache
     ports:
       - $PORT:80
       - $SSLPORT:443
@@ -11,12 +11,12 @@ services:
       - 3102:3102
     volumes:
       - $SOURCE_DIR:/var/www/html:delegated
-      - ./images/php8-apache/php.ini:/etc/php/8.2/apache2/php.ini
-      - ./images/php8-apache/cliphp.ini:/etc/php/8.2/cli/php.ini
-      - ./images/php8-apache/000-default.conf:/etc/apache2/sites-enabled/000-default.conf
-      - ./images/php8-apache/default-ssl.conf:/etc/apache2/sites-enabled/default-ssl.conf
-      - ./images/php8-apache/apache2.conf:/etc/apache2/apache2.conf
-      - ./images/php8-apache/supervisor.conf:/etc/supervisor/conf.d/supervisor.conf
+      - ./images/php7-apache/php.ini:/etc/php/7.2/apache2/php.ini
+      - ./images/php7-apache/cliphp.ini:/etc/php/7.2/cli/php.ini
+      - ./images/php7-apache/000-default.conf:/etc/apache2/sites-enabled/000-default.conf
+      - ./images/php7-apache/default-ssl.conf:/etc/apache2/sites-enabled/default-ssl.conf
+      - ./images/php7-apache/apache2.conf:/etc/apache2/apache2.conf
+      - ./images/php7-apache/supervisor.conf:/etc/supervisor/conf.d/supervisor.conf
     extra_hosts:
       - "host.docker.internal:host-gateway"
     networks:
