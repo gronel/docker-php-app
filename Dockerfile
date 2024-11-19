@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     libicu-dev \
     libxml2-dev \
+    php-gd \
     default-mysql-client
 
 # Install PHP extensions
