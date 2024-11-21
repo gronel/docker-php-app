@@ -6,9 +6,6 @@ services:
     ports:
       - $PORT:80
       - $SSLPORT:443
-      - 5173:5173
-      - 3101:3101
-      - 3102:3102
     volumes:
       - $SOURCE_DIR:/var/www/html:delegated
       - ./images/php7-apache/php.ini:/etc/php/7.2/apache2/php.ini
