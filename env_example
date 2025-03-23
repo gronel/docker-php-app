@@ -1,0 +1,3 @@
+CONTAINER_NAME = "mbms"
+SOURCE_DIR = "/Users/ronelgonzales/Developer/Timeless/mbms-web/"
+PORT = 80
