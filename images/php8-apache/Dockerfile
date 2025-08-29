@@ -5,16 +5,15 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=UTC
 
 RUN apt-get update && apt-get install -y tzdata apt-utils ca-certificates
-RUN apt-get install -y software-properties-common libterm-readline-gnu-perl curl
-RUN mkdir -p /etc/apt/keyrings && \
-    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
-    NODE_MAJOR=18 && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" > /etc/apt/sources.list.d/nodesource.list
+RUN apt-get install -y software-properties-common libterm-readline-gnu-perl curl gnupg
+# Install Node.js from Ubuntu repository (simpler and more reliable)
+RUN apt-get install -y nodejs npm
 RUN add-apt-repository ppa:ondrej/php -y
 RUN add-apt-repository ppa:ondrej/apache2 -y
 RUN apt-get update
 
-# Install Node.js and basic tools
-RUN apt-get install -y nodejs git unzip net-tools dos2unix locales supervisor clang
+# Install basic tools (Node.js already installed above)
+RUN apt-get install -y git unzip net-tools dos2unix locales supervisor clang
 
 # Install Apache
 RUN apt-get install -y apache2
@@ -42,12 +41,11 @@ RUN apt-get install -y \
 RUN apt-get install -y mariadb-client
 RUN apt-get install -y php8.2-xdebug
 
-    # Add Microsoft ODBC repository and install the driver
+    # Add Microsoft ODBC repository and install the driver with better error handling
 RUN mkdir -p /etc/apt/keyrings && \
-    curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /etc/apt/keyrings/microsoft.gpg && \
-    curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list && \
-    echo "deb [signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/debian/11/prod/ focal main" >> /etc/apt/sources.list.d/mssql-release.list && \
-    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EB3E94ADBE1229CF && \
+    curl -fsSL --retry 3 --retry-delay 5 --insecure https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /etc/apt/keyrings/microsoft.gpg && \
+    curl --retry 3 --retry-delay 5 --insecure https://packages.microsoft.com/config/ubuntu/22.04/prod.list > /etc/apt/sources.list.d/mssql-release.list && \
+    echo "deb [signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/ubuntu/22.04/prod jammy main" >> /etc/apt/sources.list.d/mssql-release.list && \
     apt-get update && ACCEPT_EULA=Y apt-get install -y msodbcsql18
 
 # Install PHP extensions
