@@ -6,15 +6,16 @@ ENV TZ=UTC
 
 RUN apt-get update && apt-get install -y tzdata apt-utils ca-certificates
 RUN apt-get install -y software-properties-common libterm-readline-gnu-perl curl
-RUN mkdir -p /etc/apt/keyrings && \
-    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
-    NODE_MAJOR=22 && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" > /etc/apt/sources.list.d/nodesource.list
 RUN add-apt-repository ppa:ondrej/php -y
 RUN add-apt-repository ppa:ondrej/apache2 -y
 RUN apt-get update
 
-# Install Node.js and basic tools
-RUN apt-get install -y nodejs git unzip net-tools dos2unix locales supervisor clang
+# Install basic tools
+RUN apt-get install -y git unzip net-tools dos2unix locales supervisor clang
+
+# Install NVM
+ENV NVM_DIR=/root/.nvm
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash
 
 # Install Apache
 RUN apt-get install -y apache2
