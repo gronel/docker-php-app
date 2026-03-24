@@ -1,3 +1,9 @@
 CONTAINER_NAME = "mbms"
 SOURCE_DIR = "/Users/ronelgonzales/Developer/Timeless/mbms-web/"
 PORT = 80
+
+# PHP version selection:
+# For PHP 8.2 (default): PHP_VERSION=8.2  PHP_DIR=php8-apache
+# For PHP 8.3:           PHP_VERSION=8.3  PHP_DIR=php83-apache
+PHP_VERSION=8.2
+PHP_DIR=php8-apache
