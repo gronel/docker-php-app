@@ -55,17 +55,19 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /et
 
 # Install PHP extensions for SQL Server and other common Laravel needs
 
-# Install PHP extensions for SQL Server and other common needs
+# Install PHP extensions for SQL Server using prebuilt binaries (PECL no longer serves these)
 RUN apt-get update && apt-get install -y \
     php8.2-pdo \
     php8.2-mysql \
-    php-pear \
-    php8.2-dev \
-    build-essential \
-    && pecl install sqlsrv pdo_sqlsrv \
+    && curl -sL "https://github.com/microsoft/msphpsql/releases/download/v5.12.0/Linux_5.12.0RTW.tar.gz" -o /tmp/msphpsql.tar.gz \
+    && tar -xzf /tmp/msphpsql.tar.gz -C /tmp \
+    && EXT_DIR=$(php8.2 -r "echo ini_get('extension_dir');") \
+    && cp /tmp/Linux/SQLSRV_8.2_NTS.so ${EXT_DIR}/sqlsrv.so \
+    && cp /tmp/Linux/PDO_SQLSRV_8.2_NTS.so ${EXT_DIR}/pdo_sqlsrv.so \
     && echo "extension=sqlsrv.so" > /etc/php/8.2/mods-available/sqlsrv.ini \
     && echo "extension=pdo_sqlsrv.so" > /etc/php/8.2/mods-available/pdo_sqlsrv.ini \
-    && phpenmod sqlsrv pdo_sqlsrv
+    && phpenmod sqlsrv pdo_sqlsrv \
+    && rm -rf /tmp/msphpsql.tar.gz /tmp/Linux
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 # RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
