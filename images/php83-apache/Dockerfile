@@ -51,19 +51,16 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /et
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
-# Install PHP extensions for SQL Server using prebuilt binaries
+# Install PHP extensions for SQL Server using PECL
 RUN apt-get update && apt-get install -y \
     php8.3-pdo \
     php8.3-mysql \
-    && curl -sL "https://github.com/microsoft/msphpsql/releases/download/v5.12.0/Linux_5.12.0RTW.tar.gz" -o /tmp/msphpsql.tar.gz \
-    && tar -xzf /tmp/msphpsql.tar.gz -C /tmp \
-    && EXT_DIR=$(php8.3 -r "echo ini_get('extension_dir');") \
-    && cp /tmp/Linux/SQLSRV_8.3_NTS.so ${EXT_DIR}/sqlsrv.so \
-    && cp /tmp/Linux/PDO_SQLSRV_8.3_NTS.so ${EXT_DIR}/pdo_sqlsrv.so \
+    && printf "\n" | pecl install sqlsrv \
+    && printf "\n" | pecl install pdo_sqlsrv \
     && echo "extension=sqlsrv.so" > /etc/php/8.3/mods-available/sqlsrv.ini \
     && echo "extension=pdo_sqlsrv.so" > /etc/php/8.3/mods-available/pdo_sqlsrv.ini \
     && phpenmod sqlsrv pdo_sqlsrv \
-    && rm -rf /tmp/msphpsql.tar.gz /tmp/Linux
+    && rm -rf /tmp/pear /root/.pearrc
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
