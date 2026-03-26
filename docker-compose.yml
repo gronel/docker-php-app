@@ -2,8 +2,8 @@ services:
   app:
     container_name: $CONTAINER_NAME
     tty: true
-    # PHP_DIR: php8-apache (8.2) | php83-apache (8.3)
-    # PHP_VERSION: 8.2 | 8.3
+    # PHP_DIR: php8-apache (8.2) | php83-apache (8.3) | php84-apache (8.4)
+    # PHP_VERSION: 8.2 | 8.3 | 8.4
     build: ./images/${PHP_DIR:-php8-apache}
     ports:
       - $PORT:80
